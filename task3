@@ -1,0 +1,61 @@
+import heapq
+
+# Graph: node -> [(neighbor, cost)]
+graph = {
+    'A': [('B', 1), ('C', 4)],
+    'B': [('D', 2), ('E', 5)],
+    'C': [('D', 1)],
+    'D': [('G', 3)],
+    'E': [('G', 1)],
+    'G': []
+}
+
+# Heuristic values
+h = {
+    'A': 6,
+    'B': 5,
+    'C': 4,
+    'D': 3,
+    'E': 1,
+    'G': 0
+}
+
+def a_star(start, goal):
+    open_list = [(h[start], start)]
+    g_cost = {start: 0}
+    parent = {start: None}
+
+    while open_list:
+        f, current = heapq.heappop(open_list)
+
+        if current == goal:
+            path = []
+            while current is not None:
+                path.append(current)
+                current = parent[current]
+            return path[::-1]
+
+        for neighbor, cost in graph[current]:
+            new_g = g_cost[current] + cost
+
+            if neighbor not in g_cost or new_g < g_cost[neighbor]:
+                g_cost[neighbor] = new_g
+                f = new_g + h[neighbor]
+                parent[neighbor] = current
+                heapq.heappush(open_list, (f, neighbor))
+
+    return None
+
+
+# Input
+start = input("Start node: ").upper()
+goal = input("Goal node: ").upper()
+
+# A* search
+path = a_star(start, goal)
+
+# Output
+if path:
+    print("Optimal Path:", path)
+else:
+    print("Path not found")
