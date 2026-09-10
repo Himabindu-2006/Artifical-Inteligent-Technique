@@ -1,0 +1,31 @@
+class MonkeyBanana:
+    def __init__(self):
+        self.state = {
+            'on_floor(Monkey)',
+            'at(Monkey, Window)',
+            'at(Box, Window)'
+        }
+
+    def solve(self):
+        print("Initial State:", self.state)
+
+        # Push box to center
+        self.state.remove('at(Monkey, Window)')
+        self.state.remove('at(Box, Window)')
+        self.state.add('at(Monkey, Center)')
+        self.state.add('at(Box, Center)')
+        print("Action: Push(Box, Window, Center)")
+
+        # Climb box
+        self.state.remove('on_floor(Monkey)')
+        self.state.add('on_box(Monkey)')
+        print("Action: Climb(Box)")
+
+        # Grasp banana
+        self.state.add('has(Monkey, Banana)')
+        print("Action: Grasp(Banana)")
+
+        print("Goal achieved:", 'has(Monkey, Banana)')
+
+
+MonkeyBanana().solve()
